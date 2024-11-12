@@ -6,10 +6,11 @@ const expressApp = express();
 
 class WebPanel {
 
-    constructor( settings ) {
+    constructor( settings, onNewTurtleCallback ) {
 
         this.settings = settings;
         this.setup();
+        this.onNewTurtleCallback = onNewTurtleCallback;
 
     }
 
@@ -20,10 +21,14 @@ class WebPanel {
         expressApp.get( "/script.js", ( req, res ) => { res.sendFile( path.join( this.settings.Settings.Path, "Panel/script.js" ) ) })
         expressApp.get( "/mining_turtle.png", ( req, res ) => { res.sendFile( path.join( this.settings.Settings.Path, "Resources/mining_turtle.png" ) ) })
         
+        expressApp.use(express.raw())
+        expressApp.use(express.urlencoded({ extended: true }))
+
         expressApp.post( "/new_turtle", ( req, res ) => {
 
-            console.log( req.body )
-            res.send("Test")
+            this.onNewTurtleCallback( req.body, ( Data ) => {
+                res.send( Data )
+            })
 
         })
 
