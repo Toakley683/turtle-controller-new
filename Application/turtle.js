@@ -1,8 +1,9 @@
 const ngrok = require("@ngrok/ngrok");
+const { WebSocket, WebSocketServer } = require( "ws" );
 
 function getCardinal( FacingIndex ) {
 
-    switch ( FacingIndex ) {
+    switch ( Number( FacingIndex ) ) {
         case 1:
             return "NORTH";
         case 2:
@@ -12,9 +13,13 @@ function getCardinal( FacingIndex ) {
         case 4:
             return "WEST";
     }
-    return nil;
+    return null;
 
 }
+
+Turtles = new Map();
+
+function getTurtleList() { return Turtles }
 
 class Turtle {
 
@@ -22,11 +27,16 @@ class Turtle {
 
         console.log( "New turtle created!" )
 
+        Turtles.set( Data.index, this )
+
+        this.index = Data.index;
+        this.name = Data.name;
+
         this.x = Data.turtleX;
         this.y = Data.turtleY;
         this.z = Data.turtleZ;
 
-        this.facing = Data.turtleFacing;
+        this.facing = Number( Data.turtleFacing );
         this.cardinalFacing = getCardinal( this.facing )
 
         this.responseCallback = responseCallback;
@@ -35,13 +45,26 @@ class Turtle {
 
         this.connect()
 
-        console.log( this )
-
     }
 
     connect() {
 
+        this.responseCallback( this.connectionURL )
 
+    }
+
+    onConnect( webSocket ) {
+
+        this.webSocket = webSocket;
+        this.isConnected = true;
+
+        this.webSocket.send( "Testing!" )
+
+    }
+
+    onSpeak( Message ) {
+
+        console.log( Message )
 
     }
 
@@ -54,6 +77,65 @@ class TurtleNetwork {
         this.settings = settings;
         this.networkCreatedCB = networkCreatedCB;
 
+        this.socketServer = new WebSocketServer( 
+            {
+                port:this.settings.Settings.TurtlePort,
+            }
+        );
+
+        this.ConnectedTurtles = new Map();
+        
+        this.socketServer.on( "connection", ( ws ) => {
+            console.log( "Connection" );
+
+            ws.on( "message", ( Data ) => {
+
+                const plainText = Data.toString( 'utf-8' )
+
+                let jsonData;
+
+                try {
+                    jsonData = JSON.parse( plainText )
+                } catch (error) {
+
+                    if ( error == "Unexpected end of JSON input" ) { return }
+
+                    console.log( error )
+                }
+
+                if ( jsonData[ "index" ] ) {
+
+                    if ( this.ConnectedTurtles.get( ws ) == null ) {
+    
+                        // Is new turtle
+
+                        const turtle = Turtles.get( jsonData[ "index" ] )
+                        
+                        turtle.onConnect( ws )
+
+                        this.ConnectedTurtles.set( ws, turtle )
+    
+                    }
+
+                }
+
+                if ( this.ConnectedTurtles.get( ws ) != null ) {
+
+                    if( jsonData.index != null ) { return }
+
+                    this.ConnectedTurtles.get( ws ).onSpeak( plainText )
+
+                }
+
+            })
+
+            ws.on( "close", () => {
+                this.ConnectedTurtles.isConnected = false;
+                this.ConnectedTurtles.delete()
+            })
+
+        });
+
         ( async () => {
                 
             const turtleListener = await ngrok.forward({
@@ -63,7 +145,7 @@ class TurtleNetwork {
                 proto: "tcp",
             });
         
-            this.url = turtleListener.url();
+            this.url = "ws://" + turtleListener.url().split( "://" )[1];
 
             networkCreatedCB( this )
         
@@ -75,5 +157,6 @@ class TurtleNetwork {
 
 module.exports = {
     Turtle,
+    getTurtleList,
     TurtleNetwork
 }

@@ -21,8 +21,8 @@ body {
 
 }
 
-.TurtleGrid div img,
-.TurtleGrid div { transition: 200ms; }
+.TurtleGrid a img,
+.TurtleGrid a { transition: 200ms; }
 
 .TurtleGrid {
 
@@ -42,7 +42,7 @@ body {
     
 }
 
-.TurtleGrid div img {
+.TurtleGrid a img {
 
     transition: 200ms;
 
@@ -58,7 +58,7 @@ body {
     
 }
 
-.TurtleGrid div p {
+.TurtleGrid a p {
 
     position: relative;
     top: 115px;
@@ -79,9 +79,9 @@ body {
     
 }
 
-.TurtleGrid div:hover { transform: scale( 1.2, 1.2 ); }
-.TurtleGrid div img:hover { background-color: rgb(76, 119, 168); }
+.TurtleGrid a:hover { transform: scale( 1.2, 1.2 ); }
+.TurtleGrid a img:hover { background-color: rgb(76, 119, 168); }
 
-.TurtleGrid div::selection,
-.TurtleGrid div img::selection,
-.TurtleGrid div p::selection { }
+.TurtleGrid a::selection,
+.TurtleGrid a img::selection,
+.TurtleGrid a p::selection { }
