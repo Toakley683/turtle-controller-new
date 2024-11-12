@@ -4,7 +4,9 @@ const BaseDirectory = "./Data/"
 
 class Settings {
 
-    constructor() {
+    constructor( Callback ) {
+
+        this.Callback = Callback;
 
         this.fileName = "settings.json"
         this.finalDirectory = BaseDirectory + this.fileName
@@ -66,11 +68,9 @@ class Settings {
 
             if ( Data == null ) { this.createFile; return; }
 
-            Object.entries( Data ).forEach( e => {
-                
-                this.Settings[ e[0] ] = e[1]
+            Object.entries( Data ).forEach( e => { this.Settings[ e[0] ] = e[1] });
 
-            });
+            this.Callback()
             
         })
 
@@ -80,7 +80,10 @@ class Settings {
 
         const Data = {}
 
-        Data.AuthToken = "AUTH_TOKEN_HERE";
+        Data.NGROKAuthToken = "AUTH_TOKEN_HERE";
+        Data.WebsitePort = 8080;
+        Data.TurtlePort = 8081;
+        Data.Path = __dirname + "./../"
 
         return Data;
 
