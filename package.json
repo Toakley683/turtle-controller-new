@@ -1,0 +1,12 @@
+{
+  "name": "turtlecontroller",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./Application/main.js",
+  "scripts": {
+    "start": "node ./Application/main.js"
+  },
+  "dependencies": {
+    "@ngrok/ngrok": "^1.4.1"
+  }
+}
