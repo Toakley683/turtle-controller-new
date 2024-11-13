@@ -19,6 +19,22 @@ function getCardinal( FacingIndex ) {
 
 }
 
+function getForwardPosition( FacingIndex, x, y, z ) {
+
+    switch ( Number( FacingIndex ) ) {
+        case 1:
+            return { x: x, y: y, z: z - 1 }; // NORTH
+        case 2:
+            return { x: x + 1, y: y, z: z }; // EAST
+        case 3: 
+            return { x: x, y: y, z: z + 1 }; // SOUTH
+        case 4:
+            return { x: x - 1, y: y, z: z }; // WEST
+    }
+    return { x: x, y: y, z: z };
+
+}
+
 Turtles = new Map();
 
 function getTurtleList() { return Turtles }
@@ -64,6 +80,50 @@ class Turtle {
 
     }
 
+    checkMoved( jsonData, commandData ) {
+
+        if ( jsonData.Result[0] == false ) { return; }
+            
+        if ( commandData.command == "turtle.forward()" ) { this.movedForward() }
+        if ( commandData.command == "turtle.turnRight()" ) { this.turnedRight() }
+        if ( commandData.command == "turtle.turnLeft()" ) { this.turnedLeft() }
+
+    }
+
+    movedForward() {
+
+        const newPos = getForwardPosition( this.facing, this.x, this.y, this.z )
+
+        this.x = newPos.x;
+        this.y = newPos.y;
+        this.z = newPos.z;
+        
+        console.log( newPos )
+
+    }
+
+    turnedRight() {
+        
+        this.facing++
+        if( this.facing > 4 ) { this.facing = 1 }
+        
+        this.cardinalFacing = getCardinal( this.facing )
+
+        console.log( this.cardinalFacing );
+
+    }
+
+    turnedLeft() {
+        
+        this.facing--
+        if( 1 > this.facing ) { this.facing = 4 }
+        
+        this.cardinalFacing = getCardinal( this.facing )
+
+        console.log( this.cardinalFacing );
+
+    }
+
     onSpeak( Message ) {
 
         let jsonData;
@@ -79,7 +139,21 @@ class Turtle {
 
         if( this.commands.get( jsonData.ID ) != null ) {
 
-            this.commands.get( jsonData.ID ).callback( jsonData.Result );
+            const commandData = this.commands.get( jsonData.ID );
+
+            commandData.callback( jsonData.Result );
+
+            this.checkMoved( jsonData, commandData );
+        
+            const sentData = {
+                x: this.x,
+                y: this.y,
+                z: this.z,
+                facing: this.facing,
+            }
+    
+            this.webSocket.send( JSON.stringify( sentData ) );
+            
             this.commands.delete( jsonData.ID );
 
         }
@@ -102,6 +176,7 @@ class Turtle {
         const commandData = 
         { 
             ID: UCommandID,
+            command: command, 
             callback: callback 
         };
 

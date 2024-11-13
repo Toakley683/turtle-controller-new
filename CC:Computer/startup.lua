@@ -388,23 +388,26 @@ function retryConnection()
         if success then
             local command = jsonData.command
 
-            x = jsonData.x
-            y = jsonData.y
-            z = jsonData.z
-            facing = jsonData.facing
-
             local file = fs.open("./data/positions.txt", "w")
 
             if 
-				x and 
-				y and 
-				z and 
-				facing 
+				jsonData.x and 
+				jsonData.y and 
+				jsonData.z and 
+				jsonData.facing 
 			then
+
+				x = jsonData.x
+				y = jsonData.y
+				z = jsonData.z
+				facing = jsonData.facing
+				
                 file.write(x .. "\n" .. y .. "\n" .. z .. "\n" .. facing)
             end
 
             file.close()
+
+			if not command then return end
 
             local func = assert(loadstring("R1, R2, R3, R4, R5, R6, R7, R8, R9=" .. command))
 
