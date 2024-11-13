@@ -52,13 +52,36 @@ else
 end
 
 local area = "new_turtle"
-local url = ""
 local Attempts = 0
 local maxAttempts = 3
 
+local disk = peripheral.find("drive")
+
+local url = nil
+local x = nil
+local y = nil
+local z = nil
+local facing = nil
+local ans = nil
+
+if disk then
+    
+    local File = fs.open( disk.getMountPath() .. "/data/info.txt", "r" )
+        
+    url = File.readLine()
+    x = File.readLine()
+    y = File.readLine()
+    z = File.readLine()
+    facing = File.readLine()
+    ans = File.readLine()
+    
+    File.close()
+    
+end
+
 repeat
 	write("NGROK URL: ")
-	url = read()
+	if not url then url = read() end
 
 	term.clear()
 	term.setCursorPos(1, 1)
@@ -76,14 +99,10 @@ until http.checkURL(url .. "/" .. area)
 term.clear()
 term.setCursorPos(1, 1)
 
-local x = nil
-local y = nil
-local z = nil
-
 repeat
 	write("Please set coordinates\n")
 	write("X: ")
-	x = read()
+	if not x then x = read() end
 
 	term.clear()
 	term.setCursorPos(1, 1)
@@ -97,7 +116,7 @@ term.setCursorPos(1, 1)
 repeat
 	write("Please set coordinates\n")
 	write("Y: ")
-	y = read()
+	if not y then y = read() end
 
 	term.clear()
 	term.setCursorPos(1, 1)
@@ -112,7 +131,7 @@ term.setCursorPos(1, 1)
 repeat
 	write("Please set coordinates\n")
 	write("Z: ")
-	z = read()
+	if not z then z = read() end
 
 	term.clear()
 	term.setCursorPos(1, 1)
@@ -123,8 +142,6 @@ until tonumber(z) ~= nil
 
 term.clear()
 term.setCursorPos(1, 1)
-
-local facing = nil
 
 function checkFace(n)
 	if tonumber(n) == nil then return false end
@@ -145,7 +162,7 @@ repeat
 	write("\n\n")
 
 	write("Facing: ")
-	facing = read()
+	if not facing then facing = read() end
 
 	term.clear()
 	term.setCursorPos(1, 1)
@@ -156,20 +173,35 @@ until checkFace(facing)
 term.clear()
 term.setCursorPos(1, 1)
 
-local ans = ""
-
 repeat
 	print("Coordinates : \n\nX: " .. x .. "\nY: " .. y .. "\nZ: " .. z .. "\nFacing: " .. facing .. "\n")
 
 	write("Correct?\n\n")
 	write("[Y/N] : ")
-	ans = read()
+	if not ans then ans = read() end
 
 	term.clear()
 	term.setCursorPos(1, 1)
 until string.lower(ans) == "y" or string.lower(ans) == "n"
 
 if string.lower(ans) == "n" then os.reboot() end
+
+if disk then
+    
+    local File = fs.open( disk.getMountPath() .. "/data/info.txt", "w" )
+    
+    File.write(
+        url.."\n"
+        ..x.."\n"
+        ..y.."\n"
+        ..z.."\n"
+        ..facing.."\n"
+        ..ans.."\n"
+    )
+    
+    File.close()
+    
+end
 
 term.clear()
 term.setCursorPos(1, 1)

@@ -15,6 +15,30 @@ const settings = new Settings( () => {
 
         }, getTurtleList, ( req, res ) => {
 
+            if( req.body.broadcast ) {
+
+                const command = req.body.command;
+                let Returns = {};
+                let Turtles = getTurtleList()
+
+                Turtles.forEach( ( value, key, map ) => {
+                    value.send_command( command, ( Result ) => {
+                        
+                        Returns[ value.name ] = Result;
+
+                        if( Object.keys( Returns ).length == Turtles.size ) {
+
+                            res.send( JSON.stringify( Returns ) )
+
+                        }
+        
+                    })
+                });
+                
+                return
+                
+            }
+
             const index = req.body.index;
             const command = req.body.command;
 

@@ -91,6 +91,12 @@ class WebPanel {
 
         });
 
+        expressApp.post( "/turtle_broadcast_command", ( req, res ) => {
+
+            this.onCommandSend( req, res )
+
+        });
+
         expressApp.get( "/get_turtles", ( req, res ) => {
             
             console.log( this.turtles )

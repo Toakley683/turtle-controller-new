@@ -22,7 +22,10 @@ body {
 }
 
 .TurtleGrid a img,
-.TurtleGrid a { transition: 200ms; }
+.TurtleGrid a { 
+    text-decoration: none;
+    transition: 200ms; 
+}
 
 .TurtleGrid {
 
@@ -76,7 +79,7 @@ body {
     font-size: 14px;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     color: white;
-    
+
 }
 
 .TurtleGrid a:hover { transform: scale( 1.2, 1.2 ); }

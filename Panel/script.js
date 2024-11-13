@@ -41,3 +41,19 @@ addEventListener( "load", () => {
 
 
 })
+
+function broadcastCommand( command ) {
+
+    if ( command == null ) { return; };
+
+    var xmlHTTP = new XMLHttpRequest();
+
+    const data = "broadcast=1" + "&command=" + command
+
+    xmlHTTP.open( "POST", "/turtle_broadcast_command", false )
+    xmlHTTP.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xmlHTTP.send( data );
+
+    return JSON.parse( xmlHTTP.responseText );
+
+}
