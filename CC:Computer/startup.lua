@@ -196,7 +196,7 @@ if disk then
         //..y.."\n"
         //..z.."\n"
         //..facing.."\n"
-        ..ans.."\n"
+        //..ans.."\n"
     )
     
     File.close()
