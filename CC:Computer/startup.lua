@@ -75,7 +75,12 @@ if positionDataExists then
     local tempFacing = file.readLine()
 
     repeat
-        if not tempX or not tempY or not tempZ or not tempFacing then
+        if 
+			not tempX or 
+			not tempY or 
+			not tempZ or 
+			not tempFacing 
+		then
             fs.delete("./data/positions.txt")
             os.reboot()
             return
@@ -390,7 +395,12 @@ function retryConnection()
 
             local file = fs.open("./data/positions.txt", "w")
 
-            if x and y and z and facing then
+            if 
+				x and 
+				y and 
+				z and 
+				facing 
+			then
                 file.write(x .. "\n" .. y .. "\n" .. z .. "\n" .. facing)
             end
 
