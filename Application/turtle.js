@@ -112,13 +112,13 @@ class Turtle {
 
     }
 
-    send_command( command ) {
+    send_command( command, callback ) {
 
         if ( !this.isConnected ) { return; };
 
         this.webSocket.send( this.__new_command( command, ( Value ) => {
 
-            console.log( Value );
+            callback( Value )
 
         }))
 

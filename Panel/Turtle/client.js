@@ -15,12 +15,10 @@ function turtle_send( command ) {
 
     const data = "index=" + Index + "&command=" + command
 
-    console.log( data )
-
     xmlHTTP.open( "POST", "/turtle_command", false )
     xmlHTTP.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
     xmlHTTP.send( data );
 
-    return xmlHTTP.responseText;
+    return JSON.parse( xmlHTTP.responseText );
 
 }

@@ -87,7 +87,7 @@ class WebPanel {
 
         expressApp.post( "/turtle_command", ( req, res ) => {
 
-            res.send( this.onCommandSend( req ) )
+            this.onCommandSend( req, res )
 
         });
 

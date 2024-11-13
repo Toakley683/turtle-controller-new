@@ -13,7 +13,7 @@ const settings = new Settings( () => {
 
             const turtleObject = new Turtle( Data, network.url, responseCallback );
 
-        }, getTurtleList, ( req ) => {
+        }, getTurtleList, ( req, res ) => {
 
             const index = req.body.index;
             const command = req.body.command;
@@ -22,7 +22,11 @@ const settings = new Settings( () => {
 
             const Turtle = Turtles.get( index )
 
-            console.log( Turtle.send_command( command ) )
+            Turtle.send_command( command, ( Result ) => {
+
+                res.send( JSON.stringify( Result ) )
+
+            })
 
         })
         
