@@ -69,11 +69,11 @@ if disk then
     local File = fs.open( disk.getMountPath() .. "/data/info.txt", "r" )
         
     url = File.readLine()
-    x = File.readLine()
-    y = File.readLine()
-    z = File.readLine()
-    facing = File.readLine()
-    ans = File.readLine()
+    //x = File.readLine()
+    //y = File.readLine()
+    //z = File.readLine()
+    //facing = File.readLine()
+    //ans = File.readLine()
     
     File.close()
     
@@ -192,10 +192,10 @@ if disk then
     
     File.write(
         url.."\n"
-        ..x.."\n"
-        ..y.."\n"
-        ..z.."\n"
-        ..facing.."\n"
+        //..x.."\n"
+        //..y.."\n"
+        //..z.."\n"
+        //..facing.."\n"
         ..ans.."\n"
     )
     
