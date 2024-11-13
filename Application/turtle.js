@@ -110,10 +110,10 @@ class Turtle {
         const sentData = {
             ID: UCommandID,
             command: command, 
-            x: this.turtleX,
-            y: this.turtleY,
-            z: this.turtleZ,
-            facing: this.turtleFacing,
+            x: this.x,
+            y: this.y,
+            z: this.z,
+            facing: this.facing,
         }
 
         return JSON.stringify( sentData );
