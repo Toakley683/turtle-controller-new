@@ -102,13 +102,21 @@ class Turtle {
         const commandData = 
         { 
             ID: UCommandID,
-            command: command, 
             callback: callback 
         };
 
-        this.commands.set( UCommandID, commandData ); 
+        this.commands.set( UCommandID, commandData );
+        
+        const sentData = {
+            ID: UCommandID,
+            command: command, 
+            x: this.turtleX,
+            y: this.turtleY,
+            z: this.turtleZ,
+            facing: this.turtleFacing,
+        }
 
-        return JSON.stringify( commandData );
+        return JSON.stringify( sentData );
 
     }
 

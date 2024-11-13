@@ -16,9 +16,6 @@ if os.getComputerLabel() == nil then
 	os.setComputerLabel(name)
 end
 
-fs.makeDir("./data/")
-local exists = fs.exists("./data/id.txt")
-
 local chartable = {}
 local chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 
@@ -27,6 +24,9 @@ for char in string.gmatch(chars, ".") do
 end
 
 local index = ""
+
+fs.makeDir("./data/")
+local exists = fs.exists("./data/id.txt")
 
 if not exists then
 	local file = fs.open("./data/id.txt", "w")
@@ -63,6 +63,49 @@ local y = nil
 local z = nil
 local facing = nil
 local ans = nil
+
+local positionDataExists = fs.exists( "./data/positions.txt" )
+
+if positionDataExists then
+	
+	local file = fs.open("./data/positions.txt", "r")
+
+	local tempX = file.readLine()
+	local tempY = file.readLine()
+	local tempZ = file.readLine()
+	local tempFacing = file.readLine()
+
+	repeat
+		print("Coordinates : \n\nX: " .. tempX .. "\nY: " .. tempY .. "\nZ: " .. tempZ .. "\nFacing: " .. tempFacing .. "\n")
+	
+		write("Correct?\n\n")
+		write("[Y/N] : ")
+		if not ans then ans = read() end
+		if not ans then ans = read() end
+	
+		term.clear()
+		term.setCursorPos(1, 1)
+	until string.lower(ans) == "y" or string.lower(ans) == "n"
+
+	if string.lower(ans) == "n" then 
+
+		file.close()
+		fs.delete( "./data/positions.txt" )
+		
+		os.reboot() 
+		return
+
+	end
+
+	x = tempX
+	y = tempY
+	z = tempZ
+	facing = tempFacing
+
+	ans = "Y"
+
+	file.close()
+end
 
 if disk then
     
@@ -189,7 +232,6 @@ repeat
 	term.clear()
 	term.setCursorPos(1, 1)
 until string.lower(ans) == "y" or string.lower(ans) == "n"
-
 if string.lower(ans) == "n" then os.reboot() end
 
 if disk then
@@ -302,7 +344,24 @@ function retryConnection()
 		)
 
 		if success then
+
 			local command = jsonData.command
+
+			x = jsonData.x
+			y = jsonData.y
+			z = jsonData.z
+			facing = jsonData.facing
+
+			local file = fs.open( "./data/positions.txt", "w" )
+
+			file.Write(
+				x .. "\n" ..
+				y .. "\n" ..
+				z .. "\n" ..
+				facing
+			)
+
+			file.close()
 
 			local func = assert(loadstring("R1, R2, R3, R4, R5, R6, R7, R8, R9=" .. command))
 
