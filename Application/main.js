@@ -13,7 +13,18 @@ const settings = new Settings( () => {
 
             const turtleObject = new Turtle( Data, network.url, responseCallback );
 
-        }, getTurtleList )
+        }, getTurtleList, ( req ) => {
+
+            const index = req.body.index;
+            const command = req.body.command;
+
+            let Turtles = getTurtleList();
+
+            const Turtle = Turtles.get( index )
+
+            console.log( Turtle.send_command( command ) )
+
+        })
         
     })
 

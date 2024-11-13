@@ -7,11 +7,12 @@ const expressApp = express();
 
 class WebPanel {
 
-    constructor( settings, onNewTurtleCallback, getTurtleData ) {
+    constructor( settings, onNewTurtleCallback, getTurtleData, onCommandSend ) {
 
         this.settings = settings;
         this.setup();
         this.onNewTurtleCallback = onNewTurtleCallback;
+        this.onCommandSend = onCommandSend;
 
         this.getTurtleData = getTurtleData;
 
@@ -82,7 +83,13 @@ class WebPanel {
                 res.send( Data )
             })
 
-        })
+        });
+
+        expressApp.post( "/turtle_command", ( req, res ) => {
+
+            res.send( this.onCommandSend( req ) )
+
+        });
 
         expressApp.get( "/get_turtles", ( req, res ) => {
             
