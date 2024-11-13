@@ -1,26 +1,26 @@
-    let Index = null;
+let Index = null;
 
-    addEventListener( "load", () => {
+addEventListener( "load", () => {
 
-        Index = document.getElementsByClassName( "Index" )[0].getAttribute( "href" )
+    Index = document.getElementsByClassName( "Index" )[0].getAttribute( "href" )
 
-    })
+})
 
-    function turtle_send( command ) {
+function turtle_send( command ) {
 
-        if ( Index == null ) { return; };
-        if ( command == null ) { return; };
+    if ( Index == null ) { return; };
+    if ( command == null ) { return; };
 
-        var xmlHTTP = new XMLHttpRequest();
+    var xmlHTTP = new XMLHttpRequest();
 
-        const Data = {}
+    const Data = {}
 
-        Data.Index = Index;
-        Data.Command = command;
+    Data.Index = Index;
+    Data.Command = command;
 
-        xmlHTTP.open( "POST", "/send_request", false )
-        xmlHTTP.send( JSON.stringify( Data ) );
+    xmlHTTP.open( "POST", "/send_request", false )
+    xmlHTTP.send( JSON.stringify( Data ) );
 
-        return xmlHTTP.responseText;
+    return xmlHTTP.responseText;
 
-    }
+}
