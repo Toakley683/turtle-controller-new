@@ -48,20 +48,30 @@ class WebPanel {
         expressApp.get( "/turtle.css", ( req, res ) => { res.sendFile( path.join( this.settings.Settings.Path, "Panel/Turtle/turtle.css" ) ) })
         expressApp.get( "/client.js", ( req, res ) => { res.sendFile( path.join( this.settings.Settings.Path, "Panel/Turtle/client.js" ) ) })
         
-        //[LINK]/turtle?Index=123210312031
         expressApp.get( "/turtle", ( req, res ) => {
 
-            console.log( req.query.Index )
+            const data = this.getTurtleData().get( req.query.Index );
+            
+            if( data ) {
 
-            fs.readFile( path.join( this.settings.Settings.Path, "Panel/Turtle/turtle.html" ), "utf-8", ( err, html ) => {
+                fs.readFile( path.join( this.settings.Settings.Path, "Panel/Turtle/turtle.html" ), "utf-8", ( err, html ) => {
+    
+                    let IndexSplit = html.split( "[TURTLE_INDEX_HERE]" )
 
-                const Split = html.split( "[TURTLE_NAME_HERE]" )
+                    IndexSplit = IndexSplit.join( data.index )
 
-                res.send( Split.join( "" ) )
-            })
+                    let NameSplit = IndexSplit.split( "[TURTLE_NAME_HERE]" )
+    
+                    res.send( NameSplit.join( data.name ) )
+                })
+
+            } else {
+
+                res.send( "Invalid turtle ID" )
+
+            }
 
         })
-
 
         expressApp.use(express.raw())
         expressApp.use(express.urlencoded({ extended: true }))
