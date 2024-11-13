@@ -407,23 +407,25 @@ function retryConnection()
 
             file.close()
 
-			if not command then return end
+			if command then
 
-            local func = assert(loadstring("R1, R2, R3, R4, R5, R6, R7, R8, R9=" .. command))
+				local func = assert(loadstring("R1, R2, R3, R4, R5, R6, R7, R8, R9=" .. command))
 
-            status, e =
-                pcall(
-                function()
-                    func()
+				status, e =
+					pcall(
+					function()
+						func()
 
-                    local returnData = {}
+						local returnData = {}
 
-                    returnData.ID = jsonData.ID
-                    returnData.Result = {R1, R2, R3, R4, R5, R6, R7, R8, R9}
+						returnData.ID = jsonData.ID
+						returnData.Result = {R1, R2, R3, R4, R5, R6, R7, R8, R9}
 
-                    ws.send(textutils.serialiseJSON(returnData))
-                end
-            )
+						ws.send(textutils.serialiseJSON(returnData))
+					end
+				)
+
+			end
         end
 
         if err then
