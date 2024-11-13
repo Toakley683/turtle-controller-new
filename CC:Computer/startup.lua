@@ -82,6 +82,7 @@ end
 repeat
 	write("NGROK URL: ")
 	if not url then url = read() end
+	if not url then url = read() end
 
 	term.clear()
 	term.setCursorPos(1, 1)
@@ -103,6 +104,7 @@ repeat
 	write("Please set coordinates\n")
 	write("X: ")
 	if not x then x = read() end
+	if not x then x = read() end
 
 	term.clear()
 	term.setCursorPos(1, 1)
@@ -116,6 +118,7 @@ term.setCursorPos(1, 1)
 repeat
 	write("Please set coordinates\n")
 	write("Y: ")
+	if not y then y = read() end
 	if not y then y = read() end
 
 	term.clear()
@@ -131,6 +134,7 @@ term.setCursorPos(1, 1)
 repeat
 	write("Please set coordinates\n")
 	write("Z: ")
+	if not z then z = read() end
 	if not z then z = read() end
 
 	term.clear()
@@ -163,6 +167,7 @@ repeat
 
 	write("Facing: ")
 	if not facing then facing = read() end
+	if not facing then facing = read() end
 
 	term.clear()
 	term.setCursorPos(1, 1)
@@ -178,6 +183,7 @@ repeat
 
 	write("Correct?\n\n")
 	write("[Y/N] : ")
+	if not ans then ans = read() end
 	if not ans then ans = read() end
 
 	term.clear()
